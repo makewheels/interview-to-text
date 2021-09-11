@@ -14,7 +14,7 @@ public class QcloudAsrUtil {
     private static final Credential cred = new Credential("AKIDYtSnrpjI3YqoZ2sQZaRApTt2vXv3oqeQ",
             "jCPREl14tQiiEQLzMUMxJwKdnBLL4i7J");
 
-    public long submit(String url) {
+    public static long submit(String url) {
         // 实例化一个http选项，可选的，没有特殊需求可以跳过
         HttpProfile httpProfile = new HttpProfile();
         httpProfile.setEndpoint("asr.tencentcloudapi.com");
@@ -45,7 +45,7 @@ public class QcloudAsrUtil {
         return resp.getData().getTaskId();
     }
 
-    public static String[] queryResult(long taskId) {
+    public static String[] queryTask(long taskId) {
         // 实例化一个http选项，可选的，没有特殊需求可以跳过
         HttpProfile httpProfile = new HttpProfile();
         httpProfile.setEndpoint("asr.tencentcloudapi.com");

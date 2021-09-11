@@ -33,7 +33,7 @@ public class QcloudMediaUtil {
         req.setInputInfo(mediaInputInfo1);
 
         TaskOutputStorage taskOutputStorage1 = new TaskOutputStorage();
-        taskOutputStorage1.setType(output);
+        taskOutputStorage1.setType("COS");
         CosOutputStorage cosOutputStorage1 = new CosOutputStorage();
         cosOutputStorage1.setBucket(QcloudCosUtil.getBucketName());
         cosOutputStorage1.setRegion(QcloudCosUtil.getRegion());
@@ -41,7 +41,7 @@ public class QcloudMediaUtil {
 
         req.setOutputStorage(taskOutputStorage1);
 
-        req.setOutputDir("movie/");
+        req.setOutputDir(output);
         MediaProcessTaskInput mediaProcessTaskInput1 = new MediaProcessTaskInput();
 
         TranscodeTaskInput[] transcodeTaskInputs1 = new TranscodeTaskInput[1];
@@ -64,5 +64,30 @@ public class QcloudMediaUtil {
             return null;
         }
         return resp.getTaskId();
+    }
+
+    public static boolean queryTask(String taskId) {
+        // 实例化一个http选项，可选的，没有特殊需求可以跳过
+        HttpProfile httpProfile = new HttpProfile();
+        httpProfile.setEndpoint("mps.tencentcloudapi.com");
+        // 实例化一个client选项，可选的，没有特殊需求可以跳过
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setHttpProfile(httpProfile);
+        // 实例化要请求产品的client对象,clientProfile是可选的
+        MpsClient client = new MpsClient(cred, "", clientProfile);
+        // 实例化一个请求对象,每个接口都会对应一个request对象
+        DescribeTaskDetailRequest req = new DescribeTaskDetailRequest();
+        req.setTaskId(taskId);
+        // 返回的resp是一个DescribeTaskDetailResponse的实例，与请求对象对应
+        DescribeTaskDetailResponse resp = null;
+        try {
+            resp = client.DescribeTaskDetail(req);
+        } catch (TencentCloudSDKException e) {
+            e.printStackTrace();
+        }
+        if (resp == null) {
+            return false;
+        }
+        return resp.getStatus().equals("FINISH");
     }
 }

@@ -11,8 +11,6 @@ import java.io.File;
 import java.util.List;
 
 public class QcloudCosUtil {
-    private static final String secretId = "AKIDZ2IK8h3B5pRpzvd7NRIH6jHez71h9QWQ";
-    private static final String secretKey = "jEVcXGm5C6mGWZP0NWR9fy3uZ6RcaKq8";
     private static final String region = "ap-beijing";
     private static final String bucketName = "offer-1253319037";
 
@@ -25,7 +23,8 @@ public class QcloudCosUtil {
     }
 
     private static final COSClient cosClient = new COSClient(
-            new BasicCOSCredentials(secretId, secretKey),
+            new BasicCOSCredentials("AKIDZ2IK8h3B5pRpzvd7NRIH6jHez71h9QWQ",
+                    "jEVcXGm5C6mGWZP0NWR9fy3uZ6RcaKq8"),
             new ClientConfig(new Region(region)));
 
     public static List<COSObjectSummary> getObjects(String path) {
@@ -33,11 +32,11 @@ public class QcloudCosUtil {
         return objectListing.getObjectSummaries();
     }
 
-    public String getUrl(String key) {
+    public static String getUrl(String key) {
         return "https://" + bucketName + ".cos." + region + ".myqcloud.com/" + key;
     }
 
-    public String upload(String key, File file) {
+    public static String upload(String key, File file) {
         cosClient.putObject(bucketName, key, file);
         return getUrl(key);
     }
