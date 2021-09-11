@@ -1,4 +1,4 @@
-package com.github.makewheels.interviewtotext;
+package com.github.makewheels.interviewtotext.bean;
 
 import lombok.Data;
 
