@@ -48,7 +48,7 @@ public class QcloudMediaUtil {
 
             TranscodeTaskInput[] transcodeTaskInputs1 = new TranscodeTaskInput[1];
             TranscodeTaskInput transcodeTaskInput1 = new TranscodeTaskInput();
-            transcodeTaskInput1.setDefinition(1010L);
+            transcodeTaskInput1.setDefinition(1088409L);
             transcodeTaskInputs1[0] = transcodeTaskInput1;
 
             mediaProcessTaskInput1.setTranscodeTaskSet(transcodeTaskInputs1);
