@@ -65,9 +65,6 @@ public class HtmlUtil {
             }
             fileLines.add(mdLine);
         }
-        for (String mdLine : fileLines) {
-            System.out.println(mdLine);
-        }
         try {
             FileUtils.writeLines(file, fileLines);
         } catch (IOException e) {

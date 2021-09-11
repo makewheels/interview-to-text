@@ -45,7 +45,7 @@ public class QcloudAsrUtil {
         return resp.getData().getTaskId();
     }
 
-    public static String[] queryTask(long taskId) {
+    public static DescribeTaskStatusResponse queryTask(long taskId) {
         // 实例化一个http选项，可选的，没有特殊需求可以跳过
         HttpProfile httpProfile = new HttpProfile();
         httpProfile.setEndpoint("asr.tencentcloudapi.com");
@@ -57,17 +57,11 @@ public class QcloudAsrUtil {
         // 实例化一个请求对象,每个接口都会对应一个request对象
         DescribeTaskStatusRequest req = new DescribeTaskStatusRequest();
         req.setTaskId(taskId);
-        // 返回的resp是一个DescribeTaskStatusResponse的实例，与请求对象对应
-        DescribeTaskStatusResponse resp = null;
         try {
-            resp = client.DescribeTaskStatus(req);
+            return client.DescribeTaskStatus(req);
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
         }
-        if (resp == null || resp.getData().getStatus() != 2) {
-            return null;
-        }
-        String result = resp.getData().getResult();
-        return result.split("\n");
+        return null;
     }
 }
