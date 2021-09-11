@@ -25,7 +25,7 @@ public class QclousAsrQuery {
             AsrClient client = new AsrClient(cred, "", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             DescribeTaskStatusRequest req = new DescribeTaskStatusRequest();
-            req.setTaskId(1432881541L);
+            req.setTaskId(1432886323L);
             // 返回的resp是一个DescribeTaskStatusResponse的实例，与请求对象对应
             DescribeTaskStatusResponse resp = client.DescribeTaskStatus(req);
             // 输出json格式的字符串回包

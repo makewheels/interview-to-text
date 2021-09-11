@@ -27,7 +27,7 @@ public class QcloudAsrUtil {
             CreateRecTaskRequest req = new CreateRecTaskRequest();
             req.setEngineModelType("8k_zh");
             req.setChannelNum(1L);
-            req.setResTextFormat(2L);
+            req.setResTextFormat(0L);
             req.setSourceType(0L);
             req.setSpeakerDiarization(1L);
             req.setSpeakerNumber(2L);
