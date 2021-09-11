@@ -1,5 +1,6 @@
 package com.github.makewheels.interviewtotext.util.qcloud;
 
+import cn.hutool.core.util.URLUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -8,6 +9,7 @@ import com.qcloud.cos.model.ObjectListing;
 import com.qcloud.cos.region.Region;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class QcloudCosUtil {
@@ -33,7 +35,8 @@ public class QcloudCosUtil {
     }
 
     public static String getUrl(String key) {
-        return "https://" + bucketName + ".cos." + region + ".myqcloud.com/" + key;
+        String url = "https://" + bucketName + ".cos." + region + ".myqcloud.com/" + key;
+        return URLUtil.encode(url);
     }
 
     public static String upload(String key, File file) {

@@ -1,12 +1,15 @@
 package com.github.makewheels.interviewtotext.util.qcloud;
 
+import com.alibaba.fastjson.JSON;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.mps.v20190612.MpsClient;
 import com.tencentcloudapi.mps.v20190612.models.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class QcloudMediaUtil {
     private static final Credential cred = new Credential("AKIDWwAAyYu1uZzB7oGTQAfuugDVXKsBG7j5",
             "A5lCOL3XllW2JL8j5D7lAKFvNaYGkz2t");
@@ -24,39 +27,41 @@ public class QcloudMediaUtil {
         ProcessMediaRequest req = new ProcessMediaRequest();
         MediaInputInfo mediaInputInfo1 = new MediaInputInfo();
         mediaInputInfo1.setType("COS");
-        CosInputInfo cosInputInfo1 = new CosInputInfo();
-        cosInputInfo1.setBucket(QcloudCosUtil.getBucketName());
-        cosInputInfo1.setRegion(QcloudCosUtil.getRegion());
-        cosInputInfo1.setObject(objectKey);
-        mediaInputInfo1.setCosInputInfo(cosInputInfo1);
+        CosInputInfo cosInputInfo = new CosInputInfo();
+        cosInputInfo.setBucket(QcloudCosUtil.getBucketName());
+        cosInputInfo.setRegion(QcloudCosUtil.getRegion());
+        cosInputInfo.setObject(objectKey);
+        mediaInputInfo1.setCosInputInfo(cosInputInfo);
 
         req.setInputInfo(mediaInputInfo1);
 
-        TaskOutputStorage taskOutputStorage1 = new TaskOutputStorage();
-        taskOutputStorage1.setType("COS");
-        CosOutputStorage cosOutputStorage1 = new CosOutputStorage();
-        cosOutputStorage1.setBucket(QcloudCosUtil.getBucketName());
-        cosOutputStorage1.setRegion(QcloudCosUtil.getRegion());
-        taskOutputStorage1.setCosOutputStorage(cosOutputStorage1);
+        TaskOutputStorage taskOutputStorage = new TaskOutputStorage();
+        taskOutputStorage.setType("COS");
+        CosOutputStorage cosOutputStorage = new CosOutputStorage();
+        cosOutputStorage.setBucket(QcloudCosUtil.getBucketName());
+        cosOutputStorage.setRegion(QcloudCosUtil.getRegion());
+        taskOutputStorage.setCosOutputStorage(cosOutputStorage);
 
-        req.setOutputStorage(taskOutputStorage1);
+        req.setOutputStorage(taskOutputStorage);
 
         req.setOutputDir(output);
-        MediaProcessTaskInput mediaProcessTaskInput1 = new MediaProcessTaskInput();
+        MediaProcessTaskInput mediaProcessTaskInput = new MediaProcessTaskInput();
 
-        TranscodeTaskInput[] transcodeTaskInputs1 = new TranscodeTaskInput[1];
-        TranscodeTaskInput transcodeTaskInput1 = new TranscodeTaskInput();
-        transcodeTaskInput1.setDefinition(1088409L);
-        transcodeTaskInputs1[0] = transcodeTaskInput1;
+        TranscodeTaskInput[] transcodeTaskInputs = new TranscodeTaskInput[1];
+        TranscodeTaskInput transcodeTaskInput = new TranscodeTaskInput();
+        transcodeTaskInput.setDefinition(1088895L);
+        transcodeTaskInputs[0] = transcodeTaskInput;
 
-        mediaProcessTaskInput1.setTranscodeTaskSet(transcodeTaskInputs1);
+        mediaProcessTaskInput.setTranscodeTaskSet(transcodeTaskInputs);
 
-        req.setMediaProcessTask(mediaProcessTaskInput1);
+        req.setMediaProcessTask(mediaProcessTaskInput);
 
         // 返回的resp是一个ProcessMediaResponse的实例，与请求对象对应
         ProcessMediaResponse resp = null;
         try {
             resp = client.ProcessMedia(req);
+            log.info("media处理, objectKey = " + objectKey + " output = " + output + " 腾讯返回：");
+            log.info(JSON.toJSONString(resp));
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
         }
@@ -82,6 +87,7 @@ public class QcloudMediaUtil {
         DescribeTaskDetailResponse resp = null;
         try {
             resp = client.DescribeTaskDetail(req);
+            log.info("media查询, taskId = " + taskId + " 腾讯返回：" + JSON.toJSONString(resp));
         } catch (TencentCloudSDKException e) {
             e.printStackTrace();
         }

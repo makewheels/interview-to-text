@@ -2,6 +2,7 @@ package com.github.makewheels.interviewtotext.util;
 
 import com.github.makewheels.interviewtotext.bean.Sentence;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -52,19 +53,26 @@ public class HtmlUtil {
         }
 
         List<String> fileLines = new ArrayList<>(sentenceList.size());
+        fileLines.add("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head> \n" +
+                "<meta charset=\"utf-8\"> \n" +
+                "<title>" + FilenameUtils.getBaseName(file.getName()) + "</title>\n" +
+                "</head>\n"
+                + "<body>");
         for (Sentence sentence : sentenceList) {
             String mdLine;
             if (sentence.getPerson() == 0) {
-                mdLine = "<font color=\"green\">**[" + sentence.getStartTimeString() + "]** "
-                        + sentence.getContent() + "</font>";
+                mdLine = "<font color=\"green\"><b>[" + sentence.getStartTimeString() + "]</b> "
+                        + sentence.getContent() + "</font><br/>";
             } else {
-//                mdLine = "<div align=\"right\"><font color= \"blue\">[**" + sentence.getStartTimeString() + "**] "
-//                        + sentence.getContent() + "</font></div>";
-                mdLine = "<font color= \"blue\">**[" + sentence.getStartTimeString() + "]** "
-                        + sentence.getContent() + "</font>";
+                mdLine = "<font color= \"blue\"><b>[" + sentence.getStartTimeString() + "]</b> "
+                        + sentence.getContent() + "</font><br/>";
             }
             fileLines.add(mdLine);
         }
+        fileLines.add("</body>\n" +
+                "</html>");
         try {
             FileUtils.writeLines(file, fileLines);
         } catch (IOException e) {

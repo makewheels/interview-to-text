@@ -17,6 +17,9 @@ public class QcloudCosController {
     @RequestMapping("callback")
     public String callback(@RequestParam String objectname) {
         log.info("收到腾讯云对象存储上传回调，key = " + objectname);
+        if (!objectname.startsWith("offer")) {
+            System.out.println("object被忽略");
+        }
         transferService.handleObject(objectname);
         return "spring boot response " + objectname;
     }

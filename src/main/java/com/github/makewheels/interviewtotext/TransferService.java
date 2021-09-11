@@ -26,13 +26,15 @@ public class TransferService {
 
     public void handleObject(String objectname) {
         new Thread(() -> {
-            log.info("接到任务: " + objectname);
+            log.info("service开始处理 objectname = " + objectname);
             //视频转音频
             String baseName = FilenameUtils.getBaseName(objectname);
-            String audioFileKey = "audio/" + baseName + ".mp3";
+            String outputPath = "audio/";
+            String audioFileKey = outputPath + baseName + "_transcode_1088895.mp3";
             log.info("开始转音频: objectname = " + objectname + ", audioFileKey = " + audioFileKey);
-            String mediaTaskId = QcloudMediaUtil.submit(objectname, audioFileKey);
+            String mediaTaskId = QcloudMediaUtil.submit(objectname, outputPath);
             for (int i = 0; i < 10 * 60; i++) {
+                log.info("查询media第" + (i + 1) + "次 mediaTaskId = " + mediaTaskId + " baseName = " + baseName);
                 if (QcloudMediaUtil.queryTask(mediaTaskId)) {
                     break;
                 }
@@ -42,7 +44,7 @@ public class TransferService {
                     e.printStackTrace();
                 }
             }
-            log.info("转音频完成");
+            log.info("转音频完成 audioFileKey = " + audioFileKey);
 
             //音频识别为文字
             log.info("开始asr识别 audioFileKey = " + audioFileKey);
@@ -50,6 +52,7 @@ public class TransferService {
             DescribeTaskStatusResponse asrResponse = null;
             for (int i = 0; i < 10 * 60; i++) {
                 asrResponse = QcloudAsrUtil.queryTask(asrTaskId);
+                log.info("第" + (i + 1) + "次查询asr结果 " + JSON.toJSONString(asrResponse));
                 if (asrResponse == null)
                     throw new NullPointerException();
                 TaskStatus data = asrResponse.getData();
