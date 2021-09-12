@@ -63,10 +63,10 @@ public class HtmlUtil {
         for (Sentence sentence : sentenceList) {
             String mdLine;
             if (sentence.getPerson() == 0) {
-                mdLine = "<font color=\"green\" size=\"5\"><b>[" + sentence.getStartTimeString() + "]</b> "
+                mdLine = "<font color=\"green\" size=\"4\"><b>[" + sentence.getStartTimeString() + "]</b> "
                         + sentence.getContent() + "</font><br/>";
             } else {
-                mdLine = "<font color= \"blue\" size=\"5\"><b>[" + sentence.getStartTimeString() + "]</b> "
+                mdLine = "<font color= \"blue\" size=\"4\"><b>[" + sentence.getStartTimeString() + "]</b> "
                         + sentence.getContent() + "</font><br/>";
             }
             fileLines.add(mdLine);
