@@ -1,6 +1,7 @@
 package com.github.makewheels.interviewtotext.util;
 
 import com.github.makewheels.interviewtotext.bean.Sentence;
+import com.github.makewheels.interviewtotext.util.qcloud.QcloudCosUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,8 @@ public class HtmlUtil {
         return stringBuilder.toString();
     }
 
-    public static void writeFile(String[] line, File file) {
+    public static void writeFile(
+            String[] line, File file, String videoKey, String audioKey, String asrKey) {
         List<Sentence> sentenceList = new ArrayList<>(line.length);
         for (String str : line) {
             String time = StringUtils.substringBetween(str, "[", "]");
@@ -52,7 +54,7 @@ public class HtmlUtil {
             sentenceList.add(sentence);
         }
 
-        List<String> fileLines = new ArrayList<>(sentenceList.size());
+        List<String> fileLines = new ArrayList<>(sentenceList.size() + 10);
         fileLines.add("<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head> \n" +
@@ -60,6 +62,13 @@ public class HtmlUtil {
                 "<title>" + FilenameUtils.getBaseName(file.getName()) + "</title>\n" +
                 "</head>\n"
                 + "<body>");
+        String videoUrl = QcloudCosUtil.getUrl(videoKey);
+        String audioUrl = QcloudCosUtil.getUrl(audioKey);
+        String asrUrl = QcloudCosUtil.getUrl(asrKey);
+        fileLines.add("<a href=\"" + videoUrl + "\"><font size=\"4\">video</font></a>");
+        fileLines.add("<a href=\"" + audioUrl + "\"><font size=\"4\">audio</font></a>");
+        fileLines.add("<a href=\"" + asrUrl + "\"><font size=\"4\">asr</font></a>");
+        fileLines.add("<br/>");
         for (Sentence sentence : sentenceList) {
             String mdLine;
             if (sentence.getPerson() == 0) {
@@ -79,4 +88,5 @@ public class HtmlUtil {
             e.printStackTrace();
         }
     }
+
 }
